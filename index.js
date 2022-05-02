@@ -35,8 +35,34 @@ async function run(){
         res.send(item);
 
 
-      })
+      });
+      app.delete('/items/:id',async(req,res)=>{
+        const id=req.params.id;
+        const query={_id:ObjectId(id)};
+        const item=await Itemscollection.deleteOne(query);
+        res.send(item);
 
+
+      });
+
+      app.put('/items/:id',async(req,res)=>{
+        const id=req.params.id;
+        
+        const updateitem=req.body;
+       
+        const query={_id:ObjectId(id)};
+        const options={upsert:true};
+        newitem={
+          $set: {
+            quantity:updateitem.newstock ,
+          }
+        };
+        const update=await Itemscollection.updateOne(query,newitem,options);
+        res.send(update);
+
+
+      });
+      
 
     }
 
