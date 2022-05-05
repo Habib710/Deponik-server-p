@@ -75,31 +75,26 @@ async function run(){
       app.post('/items',async(req,res)=>{
         const newitems=req.body;
         const tokenValue= req.headers.authorization;
-        console.log(tokenValue);
-        // const [email,AccessToken]=tokenValue.split("")
         
-        // const decode= jwt.verify(AccessToken, process.env.ACCESS_TOKEN);
-        // console.log(email);
-        // console.log(decode.email);
-
-        // if(email ===decode.email){
-
-        //   const result= await Itemscollection.insertOne(newitems);
-        //   res.send(result);
-
-        // }
-       
+        const [email,AccessToken]=tokenValue.split(" ");
         
+        const decode= jwt.verify(AccessToken, process.env.ACCESS_TOKEN);
+        
+          const result= await Itemscollection.insertOne(newitems);
+          res.send(result)
+
+      });
 
 
-
-      })
 
       // jwt Token........................
+
+
       app.post('/login', async(req,res)=>{
-        const email =req.body;
+        const emails =req.body;
+        console.log(emails);
          
-        const token = jwt.sign(email, process.env.ACCESS_TOKEN);
+        const token = jwt.sign(emails, process.env.ACCESS_TOKEN);
        res.send({token})
 
 
