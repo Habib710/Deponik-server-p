@@ -3,7 +3,9 @@ const cors = require('cors');
 const port=process.env.PORT || 5000 ;
 const app=express();
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 
 
 // middelware
@@ -36,6 +38,9 @@ async function run(){
 
 
       });
+
+      // delete..............................
+
       app.delete('/items/:id',async(req,res)=>{
         const id=req.params.id;
         const query={_id:ObjectId(id)};
@@ -44,6 +49,8 @@ async function run(){
 
 
       });
+
+      // update.........................
 
       app.put('/items/:id',async(req,res)=>{
         const id=req.params.id;
@@ -62,10 +69,38 @@ async function run(){
 
 
       });
+
+      // post.............................
+
       app.post('/items',async(req,res)=>{
         const newitems=req.body;
-        const result= await Itemscollection.insertOne(newitems);
-        res.send(result);
+        const tokenValue= req.headers.authorization;
+        console.log(tokenValue);
+        // const [email,AccessToken]=tokenValue.split("")
+        
+        // const decode= jwt.verify(AccessToken, process.env.ACCESS_TOKEN);
+        // console.log(email);
+        // console.log(decode.email);
+
+        // if(email ===decode.email){
+
+        //   const result= await Itemscollection.insertOne(newitems);
+        //   res.send(result);
+
+        // }
+       
+        
+
+
+
+      })
+
+      // jwt Token........................
+      app.post('/login', async(req,res)=>{
+        const email =req.body;
+         
+        const token = jwt.sign(email, process.env.ACCESS_TOKEN);
+       res.send({token})
 
 
 
